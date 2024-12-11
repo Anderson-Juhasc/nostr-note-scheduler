@@ -30,7 +30,6 @@ export default {
         return;
       }
 
-      console.log(new Date(publishDate.value).toISOString())
       await notesStore.addNote(content.value, new Date(publishDate.value).toISOString());
       content.value = '';
       publishDate.value = '';

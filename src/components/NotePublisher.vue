@@ -21,7 +21,7 @@ export default {
         const dueNotes = notesStore.notes.filter((note) => note.publishDate <= now);
 
         dueNotes.forEach(async (note) => {
-          //await notesStore.publishNote(note);
+          await notesStore.publishNote(note);
         });
       }, 10000); // Check every 10 seconds
     });

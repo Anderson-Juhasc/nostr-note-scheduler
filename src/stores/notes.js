@@ -33,8 +33,6 @@ export const useNotesStore = defineStore('notes', () => {
       //noteEvent.id = getEventHash(noteEvent); // Generate event hash
       noteEvent = await window.nostr.signEvent(noteEvent); // Sign the event
 
-      console.log(noteEvent)
-
       const createDate = new Date().toISOString();
 
       // Add the signed note to the list
@@ -120,8 +118,6 @@ export const useNotesStore = defineStore('notes', () => {
       }
     } catch (error) {
       console.error('Error publishing note:', error);
-    } finally {
-      //pool.close();
     }
   }
 

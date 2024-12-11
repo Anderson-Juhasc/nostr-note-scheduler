@@ -18,9 +18,8 @@
             </p>
           </div>
           <div class="action-buttons">
-            <button class="btn edit-btn">Edit</button>
-            <button class="btn delete-btn">Delete</button>
-            <button @click="deleteNote(note.id)">Delete</button>
+            <!--button class="btn edit-btn">Edit</button-->
+            <button @click="deleteNote(note.id)" class="btn delete-btn">Delete</button>
           </div>
 
           <Countdown :createDate="new Date(note.createDate).toLocaleString()" :targetDate="new Date(note.publishDate).toLocaleString()" />
@@ -46,7 +45,14 @@ export default {
     const userProfile = computed(() => notesStore.userProfile);
     const notes = computed(() => notesStore.notes);
     const sortedNotes = computed(() => notesStore.sortedNotes());
-    return { pubkey, notes, sortedNotes, userProfile, deleteNote: notesStore.deleteNote };
+
+    function deleteNote(id) {
+      const isConfirmed = window.confirm('Are you sure you want to delete this note?');
+      if (isConfirmed) {
+        notesStore.deleteNote(id);
+      }
+    }
+    return { pubkey, notes, sortedNotes, userProfile, deleteNote };
   },
 };
 </script>
@@ -62,6 +68,7 @@ export default {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Soft shadow */
   font-family: Arial, sans-serif;
   text-align: left;
+  position: relative;
 }
 
 .profile-section {
@@ -107,9 +114,11 @@ export default {
 }
 
 .action-buttons {
-  margin-top: 12px;
   display: flex;
   gap: 8px; /* Space between buttons */
+  position: absolute;
+  right: 16px;
+  top: 16px;
 }
 
 .btn {

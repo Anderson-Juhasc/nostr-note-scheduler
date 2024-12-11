@@ -35,7 +35,7 @@ export default {
       return Math.min(Math.max(percentage, 0), 100);
     },
     formattedTime() {
-      if (this.timeLeft <= 0) return "Published!";
+      if (this.timeLeft <= 0) return "Time's up!";
       const days = Math.floor(this.timeLeft / (24 * 60 * 60));
       const hours = Math.floor((this.timeLeft % (24 * 60 * 60)) / (60 * 60));
       const minutes = Math.floor((this.timeLeft % (60 * 60)) / 60);
