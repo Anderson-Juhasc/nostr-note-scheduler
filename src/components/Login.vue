@@ -26,7 +26,7 @@ import NostrSigner from '../utils/NostrSigner';
 export default {
   setup() {
     const notesStore = useNotesStore();
-    const signer = new NostrSigner('https://example.com/?event=');
+    const signer = new NostrSigner('https://andersonjuhasc.com/nostr-note-scheduler/?event=');
 
     const pubkey = computed(() => notesStore.pubkey);
     const userProfile = computed(() => notesStore.userProfile);
