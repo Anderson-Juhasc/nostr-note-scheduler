@@ -1,6 +1,7 @@
 <template>
   <div>
     <button v-if="!pubkey" @click="handleLogin">Connect with extension</button>
+    <a v-if="!pubkey" :href="signer.getPublicKeyUrl()">Connect with Amber</a>
     <div v-else>
       <div v-if="userProfile">
         <h3>Your Profile</h3>
@@ -20,10 +21,12 @@
 <script>
 import { computed } from 'vue';
 import { useNotesStore } from '../stores/notes';
+import NostrSigner from '../utils/NostrSigner';
 
 export default {
   setup() {
     const notesStore = useNotesStore();
+    const signer = new NostrSigner('https://example.com/?event=');
 
     const pubkey = computed(() => notesStore.pubkey);
     const userProfile = computed(() => notesStore.userProfile);
@@ -32,11 +35,21 @@ export default {
       await notesStore.login(notesStore.relays); // Pass relays from store
     };
 
+    const handleAmberLogin = async () => {
+
+      const permissions = [
+        { type: 'sign_event', kind: 22242 },
+        { type: 'nip44_decrypt' }
+      ];
+
+      window.alert(signer.getPublicKeyUrl(permissions));
+    };
+
     const handleLogout = () => {
       notesStore.logout();
     };
 
-    return { handleLogin, pubkey, userProfile, handleLogout };
+    return { handleLogin, signer, pubkey, userProfile, handleLogout };
   },
 };
 </script>
