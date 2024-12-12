@@ -2,6 +2,7 @@ import { defineStore } from 'pinia';
 import { reactive, ref } from 'vue';
 import { getEventHash } from 'nostr-tools';
 import { SimplePool } from 'nostr-tools/pool'
+import { nip19 } from 'nostr-tools';
 
 export const useNotesStore = defineStore('notes', () => {
   const notes = ref([]);
@@ -106,7 +107,8 @@ export const useNotesStore = defineStore('notes', () => {
     //}
 
     try {
-      pubkey.value = userPubkey;
+      userPubkey = nip19.decode(userPubkey)
+      pubkey.value = userPubkey.data;
 
       notes.value = JSON.parse(localStorage.getItem(`${userPubkey}-notes`) || '[]');
 
