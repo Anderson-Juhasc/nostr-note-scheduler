@@ -1,7 +1,9 @@
 <template>
   <div>
+    <a @click="handleAmberLogin">Connect with Amber</a>
+    <p>{{ pubkeyClipboard }}</p>
+
     <button v-if="!pubkey" @click="handleLogin">Connect with extension</button>
-    <a v-if="!pubkey" @click="handleAmberLogin">Connect with Amber</a>
     <div v-else>
       <div v-if="userProfile">
         <h3>Your Profile</h3>
@@ -19,7 +21,7 @@
 </template>
 
 <script>
-import { computed } from 'vue';
+import { ref, computed } from 'vue';
 import { useNotesStore } from '../stores/notes';
 import NostrSigner from '../utils/NostrSigner';
 
@@ -29,6 +31,7 @@ export default {
     const signer = new NostrSigner('https://andersonjuhasc.com/nostr-note-scheduler/?event=');
 
     const pubkey = computed(() => notesStore.pubkey);
+    const pubkeyClipboard = ref('');
     const userProfile = computed(() => notesStore.userProfile);
 
     const handleLogin = async () => {
@@ -37,13 +40,13 @@ export default {
 
     async function accessClipboard() {
       return navigator.clipboard.readText();
-      return new Promise(resolve => {
-        setTimeout(async () => {
-          let clipcopied = await navigator.clipboard.readText();
-          //console.log(clipcopied)
-          resolve(clipcopied)
-        }, 500);
-      });
+      //return new Promise(resolve => {
+      //  setTimeout(async () => {
+      //    let clipcopied = await navigator.clipboard.readText();
+      //    //console.log(clipcopied)
+      //    resolve(clipcopied)
+      //  }, 500);
+      //});
     }
 
     const handleAmberLogin = async () => {
@@ -59,8 +62,8 @@ export default {
       //window.open(amberSignerUrl, "_blank");
       window.location.href = amberSignerUrl
 
-      let eventSignature = await accessClipboard()
-      alert(eventSignature)
+      pubkeyClipboard.value = await accessClipboard()
+      alert(pubkeyClipboard.value)
 
       //const clipboardContent = await navigator.clipboard.readText()
 
@@ -108,7 +111,7 @@ export default {
       notesStore.logout();
     };
 
-    return { handleLogin, handleAmberLogin, pubkey, userProfile, handleLogout };
+    return { handleLogin, handleAmberLogin, pubkey, userProfile, handleLogout, pubkeyClipboard };
   },
 };
 </script>
