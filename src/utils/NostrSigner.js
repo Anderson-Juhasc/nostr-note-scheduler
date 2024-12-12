@@ -14,7 +14,7 @@ export default class NostrSigner {
       compressionType: this.compressionType,
       returnType: this.returnType,
       type,
-      callbackUrl: this.callbackUrl,
+      //callbackUrl: this.callbackUrl,
     };
 
     // Only include properties from extraParams that are not undefined
