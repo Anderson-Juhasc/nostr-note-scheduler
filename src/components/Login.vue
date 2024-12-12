@@ -36,6 +36,7 @@ export default {
     };
 
     async function accessClipboard() {
+      return navigator.clipboard.readText();
       return new Promise(resolve => {
         setTimeout(async () => {
           let clipcopied = await navigator.clipboard.readText();
@@ -53,6 +54,7 @@ export default {
       //
 
       const amberSignerUrl = signer.getPublicKeyUrl();
+      console.log(amberSignerUrl)
       await navigator.clipboard.writeText("");
       //window.open(amberSignerUrl, "_blank");
       window.location.href = amberSignerUrl
