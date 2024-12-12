@@ -62,9 +62,9 @@ export default {
       //window.open(amberSignerUrl, "_blank");
       window.location.href = amberSignerUrl
 
-      const clipboardContent = await navigator.clipboard.readText()
-
       const checkClipboard = async () => {
+        const clipboardContent = await navigator.clipboard.readText()
+
         try {
           if (!document.hasFocus()) {
             console.log("Document not focused, waiting for focus...");
