@@ -58,7 +58,7 @@ export default {
 
       const amberSignerUrl = signer.getPublicKeyUrl();
       console.log(amberSignerUrl)
-      await navigator.clipboard.writeText("");
+      //await navigator.clipboard.writeText("");
       //window.open(amberSignerUrl, "_blank");
       window.location.href = amberSignerUrl
 
