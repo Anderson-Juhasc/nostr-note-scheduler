@@ -54,7 +54,8 @@ export default {
 
       const amberSignerUrl = signer.getPublicKeyUrl();
       await navigator.clipboard.writeText("");
-      window.open(amberSignerUrl, "_blank");
+      //window.open(amberSignerUrl, "_blank");
+      window.location.href = amberSignerUrl
 
       let eventSignature = await accessClipboard()
       alert(eventSignature)
