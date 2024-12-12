@@ -35,6 +35,16 @@ export default {
       await notesStore.login(notesStore.relays); // Pass relays from store
     };
 
+    async function accessClipboard() {
+      return new Promise(resolve => {
+        setTimeout(async () => {
+          let clipcopied = await navigator.clipboard.readText();
+          //console.log(clipcopied)
+          resolve(clipcopied)
+        }, 500);
+      });
+    }
+
     const handleAmberLogin = async () => {
       //const permissions = [
       //  { type: 'sign_event', kind: 22242 },
@@ -45,46 +55,50 @@ export default {
       const amberSignerUrl = signer.getPublicKeyUrl();
       await navigator.clipboard.writeText("");
       window.open(amberSignerUrl, "_blank");
-      const clipboardContent = await navigator.clipboard.readText()
 
-      const checkClipboard = async () => {
-        try {
-          if (!document.hasFocus()) {
-            console.log("Document not focused, waiting for focus...");
-            return;
-          }
+      let eventSignature = await accessClipboard()
+      window.alert(eventSignature)
 
-          const clipboardContent = await navigator.clipboard.readText();
+      //const clipboardContent = await navigator.clipboard.readText()
 
-          if (
-            clipboardContent &&
-            clipboardContent !== "" &&
-            clipboardContent.startsWith("npub")
-          ) {
-            const pk = clipboardContent;
+      //const checkClipboard = async () => {
+      //  try {
+      //    if (!document.hasFocus()) {
+      //      console.log("Document not focused, waiting for focus...");
+      //      return;
+      //    }
 
-            window.alert(pk)
+      //    const clipboardContent = await navigator.clipboard.readText();
 
-            if (pk) {
+      //    if (
+      //      clipboardContent &&
+      //      clipboardContent !== "" &&
+      //      clipboardContent.startsWith("npub")
+      //    ) {
+      //      const pk = clipboardContent;
 
-              await navigator.clipboard.writeText("");
+      //      window.alert(pk)
 
-              clearInterval(intervalId);
-            }
-          }
-        } catch (error) {
-          console.error("Error reading clipboard:", error);
-        }
-      };
+      //      if (pk) {
 
-      checkClipboard();
-      const intervalId = setInterval(checkClipboard, 1000);
+      //        await navigator.clipboard.writeText("");
 
-      setTimeout(() => {
-        clearInterval(intervalId);
-        console.log("Amber sign in timeout");
-        window.alert("Amber sign in timeout");
-      }, 60000);
+      //        clearInterval(intervalId);
+      //      }
+      //    }
+      //  } catch (error) {
+      //    console.error("Error reading clipboard:", error);
+      //  }
+      //};
+
+      //checkClipboard();
+      //const intervalId = setInterval(checkClipboard, 1000);
+
+      //setTimeout(() => {
+      //  clearInterval(intervalId);
+      //  console.log("Amber sign in timeout");
+      //  window.alert("Amber sign in timeout");
+      //}, 60000);
     };
 
     const handleLogout = () => {
