@@ -1,7 +1,7 @@
 <template>
   <div>
     <button v-if="!pubkey" @click="handleLogin">Connect with extension</button>
-    <a v-if="!pubkey" :href="signer.getPublicKeyUrl()">Connect with Amber</a>
+    <a v-if="!pubkey" @click="handleAmberLogin">Connect with Amber</a>
     <div v-else>
       <div v-if="userProfile">
         <h3>Your Profile</h3>
@@ -36,20 +36,25 @@ export default {
     };
 
     const handleAmberLogin = async () => {
+      //const permissions = [
+      //  { type: 'sign_event', kind: 22242 },
+      //  { type: 'nip44_decrypt' }
+      //];
+      //
 
-      const permissions = [
-        { type: 'sign_event', kind: 22242 },
-        { type: 'nip44_decrypt' }
-      ];
+      const amberSignerUrl = signer.getPublicKeyUrl();
+      await navigator.clipboard.writeText("");
+      window.open(amberSignerUrl, "_blank");
+      const clipboardContent = await navigator.clipboard.readText()
 
-      window.alert(signer.getPublicKeyUrl(permissions));
+      window.alert(clipboardContent);
     };
 
     const handleLogout = () => {
       notesStore.logout();
     };
 
-    return { handleLogin, signer, pubkey, userProfile, handleLogout };
+    return { handleLogin, handleAmberLogin, pubkey, userProfile, handleLogout };
   },
 };
 </script>
