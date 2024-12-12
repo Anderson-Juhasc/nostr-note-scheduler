@@ -47,7 +47,44 @@ export default {
       window.open(amberSignerUrl, "_blank");
       const clipboardContent = await navigator.clipboard.readText()
 
-      window.alert(clipboardContent);
+      const checkClipboard = async () => {
+        try {
+          if (!document.hasFocus()) {
+            console.log("Document not focused, waiting for focus...");
+            return;
+          }
+
+          const clipboardContent = await navigator.clipboard.readText();
+
+          if (
+            clipboardContent &&
+            clipboardContent !== "" &&
+            clipboardContent.startsWith("npub")
+          ) {
+            const pk = clipboardContent;
+
+            window.alert(pk)
+
+            if (pk) {
+
+              await navigator.clipboard.writeText("");
+
+              clearInterval(intervalId);
+            }
+          }
+        } catch (error) {
+          console.error("Error reading clipboard:", error);
+        }
+      };
+
+      checkClipboard();
+      const intervalId = setInterval(checkClipboard, 1000);
+
+      setTimeout(() => {
+        clearInterval(intervalId);
+        console.log("Amber sign in timeout");
+        window.alert("Amber sign in timeout");
+      }, 60000);
     };
 
     const handleLogout = () => {
