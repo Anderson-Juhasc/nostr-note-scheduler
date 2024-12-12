@@ -82,8 +82,10 @@ export default {
 
             pubkeyClipboard.value = clipboardContent
             //alert(pubkeyClipboard.value)
+            
+            await notesStore.amberLogin(notesStore.relays, pubkeyClipboard.value); // Pass relays from store
 
-            window.alert(pk)
+            //window.alert(pk)
 
             if (pk) {
 
@@ -103,7 +105,7 @@ export default {
       setTimeout(() => {
         clearInterval(intervalId);
         console.log("Amber sign in timeout");
-        window.alert("Amber sign in timeout");
+        //window.alert("Amber sign in timeout");
       }, 60000);
     };
 

@@ -99,6 +99,32 @@ export const useNotesStore = defineStore('notes', () => {
     }
   }
 
+  async function amberLogin(relays, userPubkey) {
+    //if (!window.nostr) {
+    //  alert('No NIP-55 wallet detected. Please install a Nostr extension like Alby.');
+    //  return;
+    //}
+
+    try {
+      pubkey.value = userPubkey;
+
+      notes.value = JSON.parse(localStorage.getItem(`${userPubkey}-notes`) || '[]');
+
+      // Fetch profile from relays
+      const pool = new SimplePool();
+      const events = await pool.querySync(relays, { kinds: [0], authors: [userPubkey] });
+      if (events.length > 0) {
+        userProfile.value = JSON.parse(events[0].content);
+        console.log('Profile loaded:', userProfile.value);
+      } else {
+        console.log('No profile found.');
+        userProfile.value = null;
+      }
+    } catch (error) {
+      console.error('Error during login:', error);
+    }
+  }
+
   function logout() {
     console.log('User logged out');
     window.location.reload()
@@ -121,6 +147,6 @@ export const useNotesStore = defineStore('notes', () => {
     }
   }
 
-  return { notes, sortedNotes, relays, addNote, publishNote, deleteNote, clearAllNotes, login, logout, userProfile, pubkey };
+  return { notes, sortedNotes, relays, addNote, publishNote, deleteNote, clearAllNotes, login, amberLogin, logout, userProfile, pubkey };
 });
 
