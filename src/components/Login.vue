@@ -57,7 +57,7 @@ export default {
       window.open(amberSignerUrl, "_blank");
 
       let eventSignature = await accessClipboard()
-      window.alert(eventSignature)
+      alert(eventSignature)
 
       //const clipboardContent = await navigator.clipboard.readText()
 
