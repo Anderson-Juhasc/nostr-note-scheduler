@@ -107,8 +107,9 @@ export const useNotesStore = defineStore('notes', () => {
     //}
 
     try {
-      userPubkey = nip19.decode(userPubkey)
-      pubkey.value = userPubkey.data;
+      userPubkey = (nip19.decode(userPubkey)).data
+
+      pubkey.value = userPubkey;
 
       notes.value = JSON.parse(localStorage.getItem(`${userPubkey}-notes`) || '[]');
 
