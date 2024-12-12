@@ -28,7 +28,7 @@ export default class NostrSigner {
 
   getPublicKeyUrl(permissions = []) {
     return this.buildUrl('nostrsigner:', 'get_public_key', { 
-      permissions: JSON.stringify(permissions) 
+      //permissions: JSON.stringify(permissions) 
     });
   }
 
