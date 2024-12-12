@@ -62,49 +62,49 @@ export default {
       //window.open(amberSignerUrl, "_blank");
       window.location.href = amberSignerUrl
 
-      pubkeyClipboard.value = await accessClipboard()
-      alert(pubkeyClipboard.value)
+      const clipboardContent = await navigator.clipboard.readText()
 
-      //const clipboardContent = await navigator.clipboard.readText()
+      const checkClipboard = async () => {
+        try {
+          if (!document.hasFocus()) {
+            console.log("Document not focused, waiting for focus...");
+            return;
+          }
 
-      //const checkClipboard = async () => {
-      //  try {
-      //    if (!document.hasFocus()) {
-      //      console.log("Document not focused, waiting for focus...");
-      //      return;
-      //    }
+          const clipboardContent = await navigator.clipboard.readText();
 
-      //    const clipboardContent = await navigator.clipboard.readText();
+          if (
+            clipboardContent &&
+            clipboardContent !== "" &&
+            clipboardContent.startsWith("npub")
+          ) {
+            const pk = clipboardContent;
 
-      //    if (
-      //      clipboardContent &&
-      //      clipboardContent !== "" &&
-      //      clipboardContent.startsWith("npub")
-      //    ) {
-      //      const pk = clipboardContent;
+            pubkeyClipboard.value = clipboardContent
+            //alert(pubkeyClipboard.value)
 
-      //      window.alert(pk)
+            window.alert(pk)
 
-      //      if (pk) {
+            if (pk) {
 
-      //        await navigator.clipboard.writeText("");
+              await navigator.clipboard.writeText("");
 
-      //        clearInterval(intervalId);
-      //      }
-      //    }
-      //  } catch (error) {
-      //    console.error("Error reading clipboard:", error);
-      //  }
-      //};
+              clearInterval(intervalId);
+            }
+          }
+        } catch (error) {
+          console.error("Error reading clipboard:", error);
+        }
+      };
 
-      //checkClipboard();
-      //const intervalId = setInterval(checkClipboard, 1000);
+      checkClipboard();
+      const intervalId = setInterval(checkClipboard, 1000);
 
-      //setTimeout(() => {
-      //  clearInterval(intervalId);
-      //  console.log("Amber sign in timeout");
-      //  window.alert("Amber sign in timeout");
-      //}, 60000);
+      setTimeout(() => {
+        clearInterval(intervalId);
+        console.log("Amber sign in timeout");
+        window.alert("Amber sign in timeout");
+      }, 60000);
     };
 
     const handleLogout = () => {
