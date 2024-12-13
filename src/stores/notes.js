@@ -11,6 +11,7 @@ export const useNotesStore = defineStore('notes', () => {
   const pubkey = ref(null);
   const wallet = ref(null);
   const relays = ['wss://relay.damus.io', 'wss://nos.lol']; // Relay URLs
+  const signer = new NostrSigner('https://andersonjuhasc.com/nostr-note-scheduler/?event=');
 
   function saveToLocalStorage() {
     localStorage.setItem(`${pubkey.value}-notes`, JSON.stringify(notes.value));
@@ -36,6 +37,8 @@ export const useNotesStore = defineStore('notes', () => {
         content,
       };
 
+        console.log('Sign Event URL:', signer.getSignEventUrl(noteEvent));
+
       if (wallet.value === 'extension') {
         //noteEvent.id = getEventHash(noteEvent); // Generate event hash
         noteEvent = await window.nostr.signEvent(noteEvent); // Sign the event
@@ -51,39 +54,39 @@ export const useNotesStore = defineStore('notes', () => {
 
         alert(clipboardContent)
 
-        //const checkClipboard = async () => {
-        //  const clipboardContent = await navigator.clipboard.readText()
+        const checkClipboard = async () => {
+          const clipboardContent = await navigator.clipboard.readText()
 
-        //  try {
-        //    if (!document.hasFocus()) {
-        //      console.log("Document not focused, waiting for focus...");
-        //      return;
-        //    }
+          try {
+            if (!document.hasFocus()) {
+              console.log("Document not focused, waiting for focus...");
+              return;
+            }
 
-        //    const clipboardContent = await navigator.clipboard.readText();
+            const clipboardContent = await navigator.clipboard.readText();
 
-        //    alert(clipboardContent)
-        //    
+            alert(clipboardContent)
+            
 
-        //    if (clipboardContent) {
+            if (clipboardContent) {
 
-        //      await navigator.clipboard.writeText("");
+              await navigator.clipboard.writeText("");
 
-        //      clearInterval(intervalId);
-        //    }
-        //  } catch (error) {
-        //    console.error("Error reading clipboard:", error);
-        //  }
-        //};
+              clearInterval(intervalId);
+            }
+          } catch (error) {
+            console.error("Error reading clipboard:", error);
+          }
+        };
 
-        //checkClipboard();
-        //const intervalId = setInterval(checkClipboard, 1000);
+        checkClipboard();
+        const intervalId = setInterval(checkClipboard, 1000);
 
-        //setTimeout(() => {
-        //  clearInterval(intervalId);
-        //  console.log("Amber sign in timeout");
-        //  //window.alert("Amber sign in timeout");
-        //}, 60000);
+        setTimeout(() => {
+          clearInterval(intervalId);
+          console.log("Amber sign in timeout");
+          //window.alert("Amber sign in timeout");
+        }, 60000);
       }
 
       const createDate = new Date().toISOString();
