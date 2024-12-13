@@ -23,7 +23,9 @@ export const useNotesStore = defineStore('notes', () => {
     //}
 
     try {
-      let userPubkey = pubkey;
+      let userPubkey = pubkey.value;
+
+      console.log(userPubkey)
 
       // Create the event for the note
       let noteEvent = {
@@ -45,39 +47,43 @@ export const useNotesStore = defineStore('notes', () => {
         alert('Sign Event URL:', amberSignerUrl);
         console.log('Sign Event URL:', amberSignerUrl);
 
-        const checkClipboard = async () => {
-          const clipboardContent = await navigator.clipboard.readText()
+        const clipboardContent = await navigator.clipboard.readText();
 
-          try {
-            if (!document.hasFocus()) {
-              console.log("Document not focused, waiting for focus...");
-              return;
-            }
+        alert(clipboardContent)
 
-            const clipboardContent = await navigator.clipboard.readText();
+        //const checkClipboard = async () => {
+        //  const clipboardContent = await navigator.clipboard.readText()
 
-            alert(clipboardContent)
-            
+        //  try {
+        //    if (!document.hasFocus()) {
+        //      console.log("Document not focused, waiting for focus...");
+        //      return;
+        //    }
 
-            if (clipboardContent) {
+        //    const clipboardContent = await navigator.clipboard.readText();
 
-              await navigator.clipboard.writeText("");
+        //    alert(clipboardContent)
+        //    
 
-              clearInterval(intervalId);
-            }
-          } catch (error) {
-            console.error("Error reading clipboard:", error);
-          }
-        };
+        //    if (clipboardContent) {
 
-        checkClipboard();
-        const intervalId = setInterval(checkClipboard, 1000);
+        //      await navigator.clipboard.writeText("");
 
-        setTimeout(() => {
-          clearInterval(intervalId);
-          console.log("Amber sign in timeout");
-          //window.alert("Amber sign in timeout");
-        }, 60000);
+        //      clearInterval(intervalId);
+        //    }
+        //  } catch (error) {
+        //    console.error("Error reading clipboard:", error);
+        //  }
+        //};
+
+        //checkClipboard();
+        //const intervalId = setInterval(checkClipboard, 1000);
+
+        //setTimeout(() => {
+        //  clearInterval(intervalId);
+        //  console.log("Amber sign in timeout");
+        //  //window.alert("Amber sign in timeout");
+        //}, 60000);
       }
 
       const createDate = new Date().toISOString();
