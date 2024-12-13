@@ -17,10 +17,10 @@ export const useNotesStore = defineStore('notes', () => {
   }
 
   async function addNote(content, publishDate) {
-    if (!window.nostr) {
-      alert('No NIP-07 wallet detected. Please install a Nostr extension like Alby.');
-      return;
-    }
+    //if (!window.nostr) {
+    //  alert('No NIP-07 wallet detected. Please install a Nostr extension like Alby.');
+    //  return;
+    //}
 
     try {
       let userPubkey = pubkey;
