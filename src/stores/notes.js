@@ -3,11 +3,13 @@ import { reactive, ref } from 'vue';
 import { getEventHash } from 'nostr-tools';
 import { SimplePool } from 'nostr-tools/pool'
 import { nip19 } from 'nostr-tools';
+import NostrSigner from '../utils/NostrSigner';
 
 export const useNotesStore = defineStore('notes', () => {
   const notes = ref([]);
   const userProfile = ref(null);
   const pubkey = ref(null);
+  const wallet = ref(null);
   const relays = ['wss://relay.damus.io', 'wss://nos.lol']; // Relay URLs
 
   function saveToLocalStorage() {
@@ -21,7 +23,7 @@ export const useNotesStore = defineStore('notes', () => {
     }
 
     try {
-      const userPubkey = await window.nostr.getPublicKey();
+      let userPubkey = pubkey;
 
       // Create the event for the note
       let noteEvent = {
@@ -31,8 +33,52 @@ export const useNotesStore = defineStore('notes', () => {
         tags: [],
         content,
       };
-      //noteEvent.id = getEventHash(noteEvent); // Generate event hash
-      noteEvent = await window.nostr.signEvent(noteEvent); // Sign the event
+
+      if (wallet.value === 'extension') {
+        //noteEvent.id = getEventHash(noteEvent); // Generate event hash
+        noteEvent = await window.nostr.signEvent(noteEvent); // Sign the event
+      }
+
+      if (wallet.value === 'app') {
+        const amberSignerUrl = signer.getSignEventUrl(noteEvent);
+        window.location.href = amberSignerUrl
+        alert('Sign Event URL:', amberSignerUrl);
+        console.log('Sign Event URL:', amberSignerUrl);
+
+        const checkClipboard = async () => {
+          const clipboardContent = await navigator.clipboard.readText()
+
+          try {
+            if (!document.hasFocus()) {
+              console.log("Document not focused, waiting for focus...");
+              return;
+            }
+
+            const clipboardContent = await navigator.clipboard.readText();
+
+            alert(clipboardContent)
+            
+
+            if (clipboardContent) {
+
+              await navigator.clipboard.writeText("");
+
+              clearInterval(intervalId);
+            }
+          } catch (error) {
+            console.error("Error reading clipboard:", error);
+          }
+        };
+
+        checkClipboard();
+        const intervalId = setInterval(checkClipboard, 1000);
+
+        setTimeout(() => {
+          clearInterval(intervalId);
+          console.log("Amber sign in timeout");
+          //window.alert("Amber sign in timeout");
+        }, 60000);
+      }
 
       const createDate = new Date().toISOString();
 
@@ -82,6 +128,7 @@ export const useNotesStore = defineStore('notes', () => {
     try {
       const userPubkey = await window.nostr.getPublicKey();
       pubkey.value = userPubkey;
+      wallet.value = 'extension';
 
       notes.value = JSON.parse(localStorage.getItem(`${userPubkey}-notes`) || '[]');
 
@@ -110,6 +157,7 @@ export const useNotesStore = defineStore('notes', () => {
       userPubkey = (nip19.decode(userPubkey)).data
 
       pubkey.value = userPubkey;
+      wallet.value = 'app';
 
       notes.value = JSON.parse(localStorage.getItem(`${userPubkey}-notes`) || '[]');
 
