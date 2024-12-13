@@ -37,7 +37,6 @@ export const useNotesStore = defineStore('notes', () => {
         content,
       };
 
-        console.log('Sign Event URL:', signer.getSignEventUrl(noteEvent));
 
       if (wallet.value === 'extension') {
         //noteEvent.id = getEventHash(noteEvent); // Generate event hash
@@ -45,7 +44,7 @@ export const useNotesStore = defineStore('notes', () => {
       }
 
       if (wallet.value === 'app') {
-        const amberSignerUrl = signer.getSignEventUrl(noteEvent);
+        const amberSignerUrl = signer.getSignEventUrl(JSON.stringify(noteEvent));
         window.location.href = amberSignerUrl
         alert('Sign Event URL:', amberSignerUrl);
         console.log('Sign Event URL:', amberSignerUrl);
