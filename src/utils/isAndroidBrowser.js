@@ -1,6 +1,6 @@
 // isAndroidBrowser.js
 
 export function isAndroidBrowser() {
-  const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-  return /Android/i.test(userAgent) && /Chrome/i.test(userAgent);}
+  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+}
 
