@@ -3,7 +3,7 @@ import { reactive, ref } from 'vue';
 import { getEventHash } from 'nostr-tools';
 import { SimplePool } from 'nostr-tools/pool'
 import { nip19 } from 'nostr-tools';
-import NostrSigner from '../utils/NostrSigner';
+import nip55 from '../utils/nip55';
 
 export const useNotesStore = defineStore('notes', () => {
   const notes = ref([]);
@@ -11,7 +11,7 @@ export const useNotesStore = defineStore('notes', () => {
   const pubkey = ref(null);
   const wallet = ref(null);
   const relays = ['wss://relay.damus.io', 'wss://nos.lol']; // Relay URLs
-  const signer = new NostrSigner('https://andersonjuhasc.com/nostr-note-scheduler/?event=');
+  const signer = new nip55('https://andersonjuhasc.com/nostr-note-scheduler/?event=');
 
   function saveToLocalStorage() {
     localStorage.setItem(`${pubkey.value}-notes`, JSON.stringify(notes.value));
@@ -44,7 +44,7 @@ export const useNotesStore = defineStore('notes', () => {
       }
 
       if (wallet.value === 'app') {
-        const amberSignerUrl = signer.getSignEventUrl(JSON.stringify(noteEvent));
+        const amberSignerUrl = signer.getSignEventUrl(noteEvent);
         window.location.href = amberSignerUrl
         alert('Sign Event URL:', amberSignerUrl);
         console.log('Sign Event URL:', amberSignerUrl);

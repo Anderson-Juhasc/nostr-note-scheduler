@@ -1,6 +1,6 @@
 <template>
   <div>
-    <a @click="handleAmberLogin">Connect with Amber</a>
+    <a @click="handleAmberLogin" v-if="isAndroidBrowser()">Connect with Amber</a>
     <p>{{ pubkeyClipboard }}</p>
 
     <button v-if="!pubkey" @click="handleLogin">Connect with extension</button>
@@ -23,12 +23,13 @@
 <script>
 import { ref, computed } from 'vue';
 import { useNotesStore } from '../stores/notes';
-import NostrSigner from '../utils/NostrSigner';
+import nip55 from '../utils/nip55';
+import { isAndroidBrowser } from '../utils/isAndroidBrowser.js';
 
 export default {
   setup() {
     const notesStore = useNotesStore();
-    const signer = new NostrSigner('https://andersonjuhasc.com/nostr-note-scheduler/?event=');
+    const signer = new nip55('https://andersonjuhasc.com/nostr-note-scheduler/?event=');
 
     const pubkey = computed(() => notesStore.pubkey);
     const pubkeyClipboard = ref('');
@@ -113,7 +114,15 @@ export default {
       notesStore.logout();
     };
 
-    return { handleLogin, handleAmberLogin, pubkey, userProfile, handleLogout, pubkeyClipboard };
+    return { 
+      handleLogin,
+      handleAmberLogin,
+      pubkey,
+      userProfile,
+      handleLogout,
+      pubkeyClipboard,
+      isAndroidBrowser
+    };
   },
 };
 </script>
