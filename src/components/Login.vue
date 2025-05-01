@@ -76,8 +76,7 @@ export default {
 
           if (
             clipboardContent &&
-            clipboardContent !== "" &&
-            clipboardContent.startsWith("npub")
+            clipboardContent !== ""
           ) {
             const pk = clipboardContent;
 

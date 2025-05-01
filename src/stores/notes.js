@@ -162,8 +162,6 @@ export const useNotesStore = defineStore('notes', () => {
     //}
 
     try {
-      userPubkey = (nip19.decode(userPubkey)).data
-
       pubkey.value = userPubkey;
       wallet.value = 'app';
 
